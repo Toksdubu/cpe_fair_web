@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { deleteMain } from "../api/main";
+import { deleteMain } from "../api/mainApi";
 
 const useDeleteMain = () => {
   const [loading, setLoading] = useState(false);

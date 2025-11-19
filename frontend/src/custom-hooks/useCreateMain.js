@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { createMain } from "../api/main";
+import { createMain } from "../api/mainApi";
 
 const useCreateMain = async (newMainData) => {
   try {

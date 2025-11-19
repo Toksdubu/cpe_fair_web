@@ -21,10 +21,14 @@ import { useState, useEffect } from "react";
 import DataTableToolbar from "./data-table-toolbar";
 import useFetchMain from "../../../../custom-hooks/useFetchMain";
 
+
+
 function DataTable({ columns }) {
   const [sorting, setSorting] = useState([]); // sorting
   const [columnFilters, setColumnFilters] = useState([]); // filtering
   const { mainData } = useFetchMain();
+
+  
 
   const table = useReactTable({
     data: mainData,
