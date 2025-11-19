@@ -19,16 +19,16 @@ import {
 } from "@tanstack/react-table";
 import { useState, useEffect } from "react";
 import DataTableToolbar from "./data-table-toolbar";
-import useMain from "../../../../custom-hooks/useMain";
+import useScore from "../../../../custom-hooks/useScore";
 
 function DataTable({ columns }) {
   const [sorting, setSorting] = useState([]); // sorting
   const [columnFilters, setColumnFilters] = useState([]); // filtering
 
-  const { mainData, loading, error } = useMain();
+  const { scores, loading, error } = useScore();
 
   const table = useReactTable({
-    data: mainData,
+    data: Array.isArray(scores) ? scores : [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(), // pagination
@@ -49,7 +49,7 @@ function DataTable({ columns }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <DataTableToolbar table={table} allData={mainData} />
+      <DataTableToolbar table={table} allData={scores} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

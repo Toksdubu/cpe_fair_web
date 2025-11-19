@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useFetchMain from "../custom-hooks/useFetchMain";
+import useScore from "../custom-hooks/useScore";
 import useFetchTeamPlayers from "../custom-hooks/useFetchTeamPlayers";
 import SpecificArea from "./SpecificArea";
 
@@ -29,7 +29,7 @@ const Teams = () => {
     "chinese_garter",
   ];
 
-  const { mainData } = useFetchMain();
+  const { scores: mainData } = useScore();
   const [teamPoints, setTeamPoints] = useState([]);
   const [selectedGame, setSelectedGame] = useState("all");
 

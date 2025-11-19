@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { z } from "zod";
-import createMain from "../../custom-hooks/useCreateMain";
+import useScore from "../../custom-hooks/useScore";
 import useCreateTeam from "../../custom-hooks/useCreateTeam";
 import { Plus, Trash2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -45,6 +45,7 @@ export function CrudForm() {
     game: "",
     section_team: "",
   });
+  const { create: createScore } = useScore();
 
   const [teamData, setTeamData] = useState({
     team_name: "",
@@ -102,8 +103,7 @@ export function CrudForm() {
     }
 
     try {
-      // Call the updated function directly
-      await createMain(formState);
+      await createScore(formState);
       resetFields();
       setIsDialogOpen(false);
     } catch (error) {

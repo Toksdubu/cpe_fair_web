@@ -6,7 +6,9 @@ import dotenv from "dotenv";
 
 import { logger } from "./utils/logger.js";
 
-import mainRoutes from "./routes/main.routes.js";
+import scoreRoutes from "./routes/score.routes.js";
+import playerRoutes from "./routes/player.routes.js";
+import teamRoutes from "./routes/team.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,7 +17,9 @@ app.use(cors());
 app.use(express.json());
 
 // --- API Routes ---
-app.use("/api/main", mainRoutes);
+app.use("/api/score", scoreRoutes);
+app.use("/api/player", playerRoutes);
+app.use("/api/team", teamRoutes);
 
 // Test routes
 app.get("/", (req: Request, res: Response) => {
@@ -37,4 +41,5 @@ app.listen(PORT, () => {
   // Keep console.log for immediate visibility during development
   console.log(`\nServer is running on http://localhost:${PORT}/api`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log(process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 4));
 });

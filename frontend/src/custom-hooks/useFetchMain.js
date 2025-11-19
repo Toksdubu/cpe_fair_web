@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchMain } from "../api/mainApi";
+import { fetchMain } from "../api/scoreApi";
 
 const useFetchMain = () => {
   const [mainData, setMainData] = useState([]);

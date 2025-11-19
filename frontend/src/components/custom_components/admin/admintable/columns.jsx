@@ -12,7 +12,7 @@ import { useState } from "react";
 import { PointsManager } from "@/components/custom_components/PointsManager";
 import { EditFormDialog } from "@/components/custom_components/EditForm";
 import useFetchTeamPlayers from "@/custom-hooks/useFetchTeamPlayers";
-import useDeleteMain from "@/custom-hooks/useDeleteMain";
+import useScore from "@/custom-hooks/useScore";
 import {
   Dialog,
   DialogContent,
@@ -127,7 +127,7 @@ export const columns = [
       const { playersData } = useFetchTeamPlayers(teamName);
       const [isAlertOpen, setIsAlertOpen] = useState(false); // Manage alert dialog state
 
-      const { handleDelete, loading, error } = useDeleteMain();
+      const { remove: removeScore, loading, error } = useScore();
 
       const teamPlayers = playersData.map((player) => player.player_name);
 
@@ -157,7 +157,7 @@ export const columns = [
           toast.error("Invalid player ID");
           return;
         }
-        await handleDelete(playerId);
+        await removeScore(playerId);
       };
 
       return (

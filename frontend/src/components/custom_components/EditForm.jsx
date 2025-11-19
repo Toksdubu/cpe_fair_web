@@ -17,8 +17,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import useCreateMain from "@/custom-hooks/useCreateMain";
-import useCreateTeam from "@/custom-hooks/useCreateTeam";
+import useScore from "@/custom-hooks/useScore";
 import { Trash2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -36,8 +35,7 @@ export const EditFormDialog = ({
   const [editedGame, setEditedGame] = useState("");
   const [localTeamPlayers, setLocalTeamPlayers] = useState(teamPlayers || []);
 
-  const createMain = useCreateMain; // Custom hook for players
-  const createTeam = useCreateTeam; // Custom hook for teams
+  const { update: updateScore } = useScore();
 
   useEffect(() => {
     if (playerData) {
@@ -50,24 +48,16 @@ export const EditFormDialog = ({
   }, [playerData, teamPlayers]);
 
   const handleSave = async () => {
-    if (isTeam) {
-      const teamData = {
-        id: playerData.id,
-        team_name: editedTeamName,
-        section_team: editedSectionTeam,
-        game: editedGame,
-      };
-      await createTeam(teamData, localTeamPlayers);
-    } else {
+    if (!isTeam) {
       const newPlayerData = {
         id: playerData.id,
         full_name: editedName,
         section_team: editedSectionTeam,
         game: editedGame,
       };
-      await createMain(newPlayerData);
+      await updateScore(playerData.id, newPlayerData);
     }
-
+    // Team editing logic can be added here if you have a team update hook
     setIsOpen(false);
   };
 
