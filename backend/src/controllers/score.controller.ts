@@ -17,7 +17,7 @@ export const getScores = async (req: Request, res: Response) => {
         game,
         details,
         created_at,
-        team:team_id ( name, color, element )
+        team:team_id ( name, color )
       `)
       .is("deleted_at", null)
       .order("created_at", { ascending: false });
@@ -165,7 +165,7 @@ export const getScoresByAllSectionTeam = async (req: Request, res: Response) => 
       .from("score")
       .select(`
         id, points, game, details, created_at,
-        team:team_id ( name, color, element )
+        team:team_id ( name, color )
       `)
       .is("deleted_at", null);
 
