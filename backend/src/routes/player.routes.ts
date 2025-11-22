@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { requireAdmin } from "../middlewares/auth.js"; // Import the security guard
 import {
   getPlayers,
   getPlayerById,
@@ -9,10 +10,13 @@ import {
 
 const router = Router();
 
+// --- Public Routes (Read Only) ---
 router.get("/", getPlayers);
 router.get("/:id", getPlayerById);
-router.post("/", createPlayer);
-router.put("/:id", updatePlayer);
-router.delete("/:id", deletePlayer);
+
+// --- Admin Routes (Protected) ---
+router.post("/", requireAdmin, createPlayer);
+router.put("/:id", requireAdmin, updatePlayer);
+router.delete("/:id", requireAdmin, deletePlayer);
 
 export default router;

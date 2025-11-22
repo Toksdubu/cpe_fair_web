@@ -1,15 +1,18 @@
 import type { Request, Response } from "express";
-import { supabase } from "../lib/supabaseClient.js";
+import { supabase } from "../lib/supabaseClient.js"; // Updated Import
 import { logger } from "../utils/logger.js";
-import { Player, CreatePlayerDto, UpdatePlayerDto } from "../types/player.js";
+import type { Player, CreatePlayerDto, UpdatePlayerDto } from "../types/player.js";
 
 // GET /api/player
 export const getPlayers = async (req: Request, res: Response) => {
   try {
     const { data, error } = await supabase
       .from("player")
-      .select("*")
-      .returns<Player[]>();
+      .select(`
+        *,
+        team:team_id ( name, color )
+      `)
+      .order("full_name", { ascending: true });
 
     if (error) throw error;
     res.json(data);
@@ -28,9 +31,12 @@ export const getPlayerById = async (
     const { id } = req.params;
     const { data, error } = await supabase
       .from("player")
-      .select("*")
+      .select(`
+        *,
+        team:team_id ( name, color )
+      `)
       .eq("id", id)
-      .single(); // Ensures only one row is returned
+      .single();
 
     if (error) throw error;
 
@@ -46,12 +52,19 @@ export const createPlayer = async (
   req: Request<{}, {}, CreatePlayerDto>,
   res: Response
 ) => {
+  const { full_name, cys, team_id } = req.body;
+
+  if (!full_name || !cys) {
+    return res.status(400).json({ error: "Name and CYS are required" });
+  }
+
   try {
     const { data, error } = await supabase
       .from("player")
-      .insert(req.body)
+      .insert([{ full_name, cys, team_id }])
       .select()
       .single();
+
     if (error) throw error;
     res.status(201).json({ message: "Player created successfully", data });
   } catch (err: any) {
@@ -65,14 +78,17 @@ export const updatePlayer = async (
   req: Request<{ id: string }, {}, UpdatePlayerDto>,
   res: Response
 ) => {
+  const { id } = req.params;
+  const { full_name, cys, team_id } = req.body;
+
   try {
-    const { id } = req.params;
     const { data, error } = await supabase
       .from("player")
-      .update(req.body)
+      .update({ full_name, cys, team_id })
       .eq("id", id)
       .select()
       .single();
+
     if (error) throw error;
     res.json({ message: "Player updated successfully", data });
   } catch (err: any) {
@@ -86,6 +102,7 @@ export const deletePlayer = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { error } = await supabase.from("player").delete().eq("id", id);
+    
     if (error) throw error;
     res.json({ message: "Player deleted successfully", data: { id } });
   } catch (err: any) {
